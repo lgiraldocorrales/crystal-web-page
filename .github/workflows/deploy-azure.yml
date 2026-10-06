@@ -7,6 +7,9 @@ on:
 
 jobs:
   deploy:
+    # Keep main deployable without failing fresh forks or environments that
+    # have not received their Azure repository variables yet.
+    if: ${{ vars.AZURE_WEBAPP_NAME != '' }}
     runs-on: ubuntu-latest
     environment: production
     env:
