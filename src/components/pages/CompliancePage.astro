@@ -1,0 +1,16 @@
+---
+import ArrowLink from "@/components/ArrowLink.astro";
+import InternalHero from "@/components/InternalHero.astro";
+import type { Locale, PageContent } from "@/data/site";
+import { assetBase, shared } from "@/data/site";
+
+/** Props for the governance and compliance page. */
+export interface Props {
+  /** Active locale. */ locale: Locale;
+  /** Governance, principles and policy content. */ content: PageContent<"compliance">;
+}
+const { content: p } = Astro.props;
+---
+<InternalHero eyebrow={p.eyebrow} title={p.title} intro={p.intro} image={shared.media.essence} imageAlt={p.heroAlt} pageKey="compliance" />
+<section class="compliance-governance section shell"><span class="section-no">01</span><div><h2 data-title>{p.governanceTitle}</h2><p>{p.governanceBody}</p></div></section>
+<section class="principles section"><div class="shell"><div class="section-heading"><span class="section-no">02</span><h2 data-title>{p.principlesTitle}</h2></div><ol>{p.principles.map((principle, index) => <li><span>{String(index + 1).padStart(2, "0")}</span><strong>{principle}</strong></li>)}</ol><div class="policy-action"><ArrowLink href={`${assetBase}/pdf/Politica_de_tratamiento_de_datos_personales.pdf`} label={p.policyLabel} external /></div></div></section>

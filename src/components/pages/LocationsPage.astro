@@ -1,0 +1,14 @@
+---
+import InternalHero from "@/components/InternalHero.astro";
+import type { Locale, PageContent } from "@/data/site";
+import { shared } from "@/data/site";
+
+/** Props for the regional footprint page. */
+export interface Props {
+  /** Active locale. */ locale: Locale;
+  /** Locations and operating-network content. */ content: PageContent<"locations">;
+}
+const { content: p } = Astro.props;
+---
+<InternalHero eyebrow={p.eyebrow} title={p.title} intro={p.intro} image={shared.media.company} imageAlt={p.heroAlt} pageKey="locations" />
+<section class="location-network section shell"><div class="section-heading"><span class="section-no">01</span><h2 data-title>{p.networkTitle}</h2></div><ol>{p.locations.map(([place, figure, body], index) => <li><span>{String(index + 1).padStart(2, "0")}</span><p>{place}</p><h3>{figure}</h3><p>{body}</p></li>)}</ol></section>

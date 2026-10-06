@@ -1,0 +1,42 @@
+---
+import ArrowLink from "@/components/ArrowLink.astro";
+import type { Locale, PageContent } from "@/data/site";
+import { shared } from "@/data/site";
+
+/**
+ * Props for the bilingual corporate home page.
+ */
+export interface Props {
+  /** Active locale used for labels and links. */
+  locale: Locale;
+  /** Validated home-page content. */
+  content: PageContent<"home">;
+}
+
+const { locale, content: p } = Astro.props;
+const es = locale.id === "es";
+const language = locale.id === "en" ? "en" : "es";
+const disciplines = [
+  ["01", es ? "Hilandería" : "Spinning", shared.media.yarn, es ? "Fibra / hilo / conocimiento" : "Fiber / yarn / knowledge"],
+  ["02", es ? "Manufactura" : "Manufacturing", shared.media.fullPackage, es ? "Textil / confección / calcetería" : "Textiles / garments / hosiery"],
+  ["03", es ? "Marcas" : "Brands", shared.media.brands, "Gef / Punto Blanco / Baby Fresh / Galax"]
+];
+---
+
+<section class="home-hero" data-hero>
+  <figure class="home-hero__image" data-image-reveal><img src={shared.media.home} alt={p.heroAlt} width="1920" height="1080" fetchpriority="high"></figure>
+  <div class="home-hero__veil"></div>
+  <div class="home-hero__copy shell"><p class="eyebrow" data-reveal>{p.eyebrow}</p><h1 data-title>{p.title}</h1><p class="hero-lede" data-reveal>{p.intro}</p><ArrowLink href={locale.paths.company} label={locale.common.discover} light /></div>
+  <p class="home-hero__index">{p.index}</p><span class="scroll-mark">{locale.common.scroll}<i></i></span>
+</section>
+<section class="opening-statement shell section"><span class="section-no">01 / 05</span><h2 data-title>{p.opening}</h2><p>{es ? "De la fibra al punto de venta, cada etapa comparte conocimiento, exigencia y una misma dirección." : "From fiber to point of sale, every stage shares knowledge, rigor and one direction."}</p></section>
+<section class="home-business section" aria-labelledby="home-business-title">
+  <div class="shell section-heading"><span class="section-no">02 / 05</span><div><h2 id="home-business-title" data-title>{p.businessTitle}</h2><p>{p.businessIntro}</p></div></div>
+  <div class="discipline-list shell">{disciplines.map(([number, title, image, note]) => <a class="discipline" href={locale.paths.business} data-preview-row><span>{number}</span><h3>{title}</h3><p>{note}</p><figure><img src={image} alt="" width="760" height="520" loading="lazy"></figure><i>↗</i></a>)}</div>
+</section>
+<section class="purpose-band section" aria-labelledby="purpose-band-title"><figure data-image-reveal><img src={shared.media.purpose} alt="" width="1600" height="1000" loading="lazy"></figure><div class="purpose-band__copy"><span class="section-no">03 / 05</span><h2 id="purpose-band-title" data-title>{p.purposeTitle}</h2><ArrowLink href={locale.paths.purpose} label={locale.common.discover} light /></div></section>
+<section class="footprint section shell"><div class="section-heading"><span class="section-no">04 / 05</span><div><p class="eyebrow">{es ? "Presencia" : "Footprint"}</p><h2 data-title>{es ? "Hecho aquí. Presente allá." : "Made here. Present there."}</h2></div></div><dl class="stat-grid">{shared.stats.map((stat) => <div data-stat><dt>{stat.value}</dt><dd>{stat[language]}</dd></div>)}</dl></section>
+<section class="impact-panel section"><div class="impact-panel__media"><video muted loop playsinline preload="metadata" poster={shared.media.environment} data-autoplay><source src={shared.media.video} type="video/mp4"></video></div><div class="impact-panel__copy"><span class="section-no">05 / 05</span><h2 data-title>{p.sustainabilityTitle}</h2><p>{p.sustainabilityBody}</p><ArrowLink href={locale.paths.sustainability} label={locale.common.discover} light /></div></section>
+<section class="faq section shell"><div class="section-heading"><span class="section-no">FAQ</span><h2>{p.faqTitle}</h2></div><div class="faq-list">{p.faqs.map(([question, answer], index) => <details open={index === 0}><summary><span>0{index + 1}</span>{question}<i></i></summary><p>{answer}</p></details>)}</div></section>
+
+{/* Media and copy are static; only the video and disclosure controls receive progressive enhancement. */}

@@ -1,0 +1,75 @@
+---
+import "@/styles/fonts.css";
+import "@/styles/global.css";
+import Footer from "@/components/Footer.astro";
+import Header from "@/components/Header.astro";
+import Loader from "@/components/Loader.astro";
+import type { Locale, PageKey } from "@/data/site";
+import { assetBase, shared } from "@/data/site";
+
+/**
+ * Props for the global document layout.
+ */
+export interface Props {
+  /** Locale content and route map for the current document. */
+  locale: Locale;
+  /** Stable key of the page being rendered. */
+  pageKey: PageKey;
+}
+
+const { locale, pageKey } = Astro.props;
+const page = locale.pages[pageKey];
+const canonical = new URL(locale.paths[pageKey], Astro.site);
+const alternate = new URL(locale.alternatePaths[pageKey], Astro.site);
+const organization = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "Crystal S.A.S.",
+  url: "https://www.crystal.com.co/",
+  logo: `${assetBase}/images/Logos/Logo-crystal-transparente.png`,
+  foundingDate: "1938",
+  address: { "@type": "PostalAddress", addressLocality: "Medellín", addressCountry: "CO" },
+  sameAs: Object.values(shared.socials)
+};
+const faq = pageKey === "home" ? {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: locale.pages.home.faqs.map(([question, answer]) => ({ "@type": "Question", name: question, acceptedAnswer: { "@type": "Answer", text: answer } }))
+} : null;
+const loaderLabel = locale.id === "es" ? "Cargando sitio de Crystal" : "Loading Crystal website";
+---
+
+<!doctype html>
+<html lang={locale.code}>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <title>{page.metaTitle}</title>
+    <meta name="description" content={page.metaDescription}>
+    <meta name="theme-color" content="#f0eee8">
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="canonical" href={canonical}>
+    <link rel="alternate" hreflang={locale.id === "es" ? "en" : "es-CO"} href={alternate}>
+    <link rel="alternate" hreflang="x-default" href="https://www.crystal.com.co/">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content={page.metaTitle}>
+    <meta property="og:description" content={page.metaDescription}>
+    <meta property="og:url" content={canonical}>
+    <meta property="og:image" content={shared.media.home}>
+    <script is:inline src="/scripts/theme.js"></script>
+    {pageKey === "contact" && import.meta.env.PUBLIC_TURNSTILE_SITE_KEY && <script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>}
+    <script type="application/ld+json" set:html={JSON.stringify(organization)}></script>
+    {faq && <script type="application/ld+json" set:html={JSON.stringify(faq)}></script>}
+  </head>
+  <body class:list={[`page-${pageKey}`, { "is-loading": pageKey === "home" }]} data-language={locale.id}>
+    <a class="skip-link" href="#main">{locale.skip}</a>
+    {pageKey === "home" && <Loader label={loaderLabel} />}
+    <Header locale={locale} pageKey={pageKey} />
+    <main id="main"><slot /></main>
+    <Footer locale={locale} />
+    <script src="../scripts/site.ts"></script>
+  </body>
+</html>
+
+{/* BaseLayout centralizes metadata and schema. Static children intentionally require no client:* directive. */}

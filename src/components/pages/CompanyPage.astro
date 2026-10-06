@@ -1,0 +1,17 @@
+---
+import InternalHero from "@/components/InternalHero.astro";
+import type { Locale, PageContent } from "@/data/site";
+import { assetBase, shared } from "@/data/site";
+
+/** Props for the company page. */
+export interface Props {
+  /** Active locale. */ locale: Locale;
+  /** Company history and governance content. */ content: PageContent<"company">;
+}
+const { locale, content: p } = Astro.props;
+const language = locale.id === "en" ? "en" : "es";
+---
+<InternalHero eyebrow={p.eyebrow} title={p.title} intro={p.intro} image={shared.media.company} imageAlt={p.heroAlt} pageKey="company" />
+<section class="history section shell"><div class="section-heading"><span class="section-no">01</span><h2 data-title>{p.historyTitle}</h2></div><ol class="timeline">{p.history.map(([year, title, body]) => <li><time>{year}</time><div><h3>{title}</h3><p>{body}</p></div></li>)}</ol></section>
+<section class="company-footprint section"><div class="shell company-footprint__grid"><div><span class="section-no">02</span><h2 data-title>{p.footprintTitle}</h2><p>{p.footprintBody}</p></div><dl class="stat-grid stat-grid--stacked">{shared.stats.map((stat) => <div data-stat><dt>{stat.value}</dt><dd>{stat[language]}</dd></div>)}</dl></div></section>
+<section class="governance section shell" id="governance"><span class="section-no">03</span><div><h2 data-title>{p.governanceTitle}</h2><p>{p.governanceBody}</p><div class="document-links"><a href={`${assetBase}/pdf/Politica_de_tratamiento_de_datos_personales.pdf`} target="_blank" rel="noopener">{p.governanceLink}<i>↓</i></a><a href={locale.paths.contact}>{locale.nav.contact}<i>↗</i></a></div></div></section>

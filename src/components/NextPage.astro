@@ -1,0 +1,21 @@
+---
+import type { Locale, PageKey } from "@/data/site";
+import { pageOrder } from "@/data/site";
+
+/**
+ * Props for sequential page navigation.
+ */
+export interface Props {
+  /** Locale providing translated route labels. */
+  locale: Locale;
+  /** Current page used to resolve the following route. */
+  pageKey: PageKey;
+}
+
+const { locale, pageKey } = Astro.props;
+const position = pageOrder.indexOf(pageKey);
+const next = pageOrder[(position + 1) % pageOrder.length] ?? "home";
+const label = next === "home" ? (locale.id === "es" ? "Inicio" : "Home") : locale.nav[next];
+---
+
+<a class="next-page" href={locale.paths[next]}><span>{locale.common.next}</span><strong>{label}</strong><i>↗</i></a>

@@ -1,0 +1,16 @@
+---
+import InternalHero from "@/components/InternalHero.astro";
+import type { Locale, PageContent } from "@/data/site";
+import { shared } from "@/data/site";
+
+/** Props for the sustainability page. */
+export interface Props {
+  /** Active locale. */ locale: Locale;
+  /** Sustainability pillars, commitments and reports. */ content: PageContent<"sustainability">;
+}
+const { locale, content: p } = Astro.props;
+---
+<InternalHero eyebrow={p.eyebrow} title={p.title} intro={p.intro} image={shared.media.environment} pageKey="sustainability" />
+<section class="pillars section shell"><div class="section-heading"><span class="section-no">01</span><h2 data-title>{locale.id === "es" ? "Tres pilares, una misma ruta." : "Three pillars, one path."}</h2></div><ol>{p.pillars.map(([number, title, body]) => <li><span>{number}</span><h3>{title}</h3><p>{body}</p></li>)}</ol></section>
+<section class="commitments section"><article><figure data-image-reveal><img src={shared.media.social} alt="" width="1200" height="900" loading="lazy"></figure><div><span>02 / SOCIAL</span><h2 data-title>{p.socialTitle}</h2><p>{p.socialBody}</p></div></article><article><figure data-image-reveal><img src={shared.media.water} alt="" width="1200" height="900" loading="lazy"></figure><div><span>03 / {locale.id === "es" ? "PLANETA" : "PLANET"}</span><h2 data-title>{p.environmentTitle}</h2><p>{p.environmentBody}</p></div></article></section>
+<section class="reports section shell" id="reports"><div><span class="section-no">04</span><h2 data-title>{p.reportsTitle}</h2><p>{p.reportsBody}</p><small>{p.certification}</small></div><div class="report-list">{p.reports.map((year) => <div><span>{locale.footer.reports}</span><strong>{year}</strong><i>—</i></div>)}</div></section>

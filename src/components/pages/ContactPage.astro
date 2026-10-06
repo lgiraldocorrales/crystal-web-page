@@ -1,0 +1,23 @@
+---
+import type { Locale, PageContent } from "@/data/site";
+
+/** Props for the contact page and secure API form. */
+export interface Props {
+  /** Active locale. */ locale: Locale;
+  /** Contact labels, departments and privacy copy. */ content: PageContent<"contact">;
+}
+const { locale, content: p } = Astro.props;
+const phoneLabel = locale.id === "es" ? "Teléfono" : "Phone";
+const turnstileSiteKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
+---
+<section class="contact-page"><div class="shell contact-intro"><p class="eyebrow">{p.eyebrow}</p><h1 data-title>{p.title}</h1><p>{p.intro}</p></div><div class="shell contact-layout"><aside><span>{p.customerLine}</span><a href="tel:+5718000517536">{p.phone}</a><a href="mailto:proteccionbasedatos@crystal.com.co">proteccionbasedatos@crystal.com.co</a></aside><form class="contact-form" data-contact-form novalidate>
+  <label class="field field--wide"><span>{p.fields.area}</span><select name="area" required><option value=""></option>{p.areas.map((area) => <option>{area}</option>)}</select></label>
+  <label class="field"><span>{p.fields.name}</span><input name="name" autocomplete="given-name" maxlength="100" required></label><label class="field"><span>{p.fields.lastName}</span><input name="lastName" autocomplete="family-name" maxlength="100" required></label>
+  <label class="field"><span>{p.fields.email}</span><input type="email" name="email" autocomplete="email" maxlength="254" required></label><label class="field"><span>{phoneLabel}</span><input type="tel" name="phone" autocomplete="tel" maxlength="40"></label>
+  <label class="field field--wide"><span>{p.fields.company}</span><input name="company" autocomplete="organization" maxlength="120"></label>
+  <label class="field field--wide"><span>{p.fields.message}</span><textarea name="message" rows="6" minlength="10" maxlength="3000" required></textarea></label><input class="trap" name="website" tabindex="-1" autocomplete="off">
+  {turnstileSiteKey && <div class="field field--wide"><div class="cf-turnstile" data-sitekey={turnstileSiteKey}></div></div>}
+  <p class="form-privacy">{p.privacy}</p><button class="submit-button" type="submit"><span>{p.fields.submit}</span><i>↗</i></button><p class="form-status" role="status" data-form-status></p>
+</form></div></section>
+
+{/* The native form remains usable without a client framework; site.ts only handles validation feedback and API submission. */}

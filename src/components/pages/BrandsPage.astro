@@ -1,0 +1,16 @@
+---
+import ArrowLink from "@/components/ArrowLink.astro";
+import InternalHero from "@/components/InternalHero.astro";
+import type { Locale, PageContent } from "@/data/site";
+import { shared } from "@/data/site";
+
+/** Props for the portfolio page. */
+export interface Props {
+  /** Active locale. */ locale: Locale;
+  /** Brand portfolio content. */ content: PageContent<"brands">;
+}
+const { locale, content: p } = Astro.props;
+---
+<InternalHero eyebrow={p.eyebrow} title={p.title} intro={p.intro} image={shared.media.brands} imageAlt={p.heroAlt} pageKey="brands" />
+<section class="brand-portfolio section shell"><div class="section-heading"><span class="section-no">01</span><h2 data-title>{p.listTitle}</h2></div><ol>{p.brands.map(([name, body], index) => <li><span>{String(index + 1).padStart(2, "0")}</span><h3>{name}</h3><p>{body}</p></li>)}</ol></section>
+<section class="brand-bridge section"><div class="shell"><span class="section-no">02</span><h2 data-title>{p.closingTitle}</h2><p>{p.closingBody}</p><ArrowLink href={locale.paths.business} label={locale.nav.business} light /></div></section>

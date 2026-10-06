@@ -1,0 +1,18 @@
+---
+import SitePage from "@/components/SitePage.astro";
+import { routes, type RouteEntry } from "@/data/routes";
+
+export function getStaticPaths() {
+  return routes
+    .filter((route) => route.pathname !== "/")
+    .map((route) => ({ params: { slug: route.slug }, props: { route } }));
+}
+
+/** Route data is produced exclusively by getStaticPaths at build time. */
+interface Props {
+  route: RouteEntry;
+}
+
+const { route } = Astro.props;
+---
+<SitePage localeId={route.localeId} pageKey={route.pageKey} />

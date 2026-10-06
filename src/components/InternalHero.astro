@@ -1,0 +1,27 @@
+---
+/**
+ * Props for an editorial hero shared by internal pages.
+ */
+export interface Props {
+  /** Small category label displayed above the title. */
+  eyebrow: string;
+  /** Unique page heading. */
+  title: string;
+  /** Introductory summary. */
+  intro: string;
+  /** Hero image URL. */
+  image: string;
+  /** Accessible image description. */
+  imageAlt?: string;
+  /** Stable page key used by visual variants. */
+  pageKey: string;
+}
+
+const { eyebrow, title, intro, image, imageAlt = "", pageKey } = Astro.props;
+---
+
+<section class:list={["internal-hero", `internal-hero--${pageKey}`]}>
+  <div class="shell internal-hero__copy"><p class="eyebrow" data-reveal>{eyebrow}</p><h1 data-title>{title}</h1><p class="hero-lede" data-reveal>{intro}</p></div>
+  <figure data-image-reveal><img src={image} alt={imageAlt} width="1800" height="1080" fetchpriority="high"></figure>
+  <span class="internal-hero__code">CR / {pageKey.toUpperCase()}</span>
+</section>

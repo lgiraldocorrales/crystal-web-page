@@ -1,0 +1,36 @@
+---
+import BrandsPage from "@/components/pages/BrandsPage.astro";
+import BusinessPage from "@/components/pages/BusinessPage.astro";
+import CompanyPage from "@/components/pages/CompanyPage.astro";
+import CompliancePage from "@/components/pages/CompliancePage.astro";
+import ContactPage from "@/components/pages/ContactPage.astro";
+import HomePage from "@/components/pages/HomePage.astro";
+import LocationsPage from "@/components/pages/LocationsPage.astro";
+import PurposePage from "@/components/pages/PurposePage.astro";
+import SustainabilityPage from "@/components/pages/SustainabilityPage.astro";
+import type { Locale, PageContent, PageKey } from "@/data/site";
+
+/**
+ * Props for selecting a page-family component at build time.
+ */
+export interface Props {
+  /** Active locale. */
+  locale: Locale;
+  /** Stable page family to render. */
+  pageKey: PageKey;
+}
+
+const { locale, pageKey } = Astro.props;
+---
+
+{pageKey === "home" && <HomePage locale={locale} content={locale.pages.home as PageContent<"home">} />}
+{pageKey === "company" && <CompanyPage locale={locale} content={locale.pages.company as PageContent<"company">} />}
+{pageKey === "purpose" && <PurposePage locale={locale} content={locale.pages.purpose as PageContent<"purpose">} />}
+{pageKey === "business" && <BusinessPage locale={locale} content={locale.pages.business as PageContent<"business">} />}
+{pageKey === "brands" && <BrandsPage locale={locale} content={locale.pages.brands as PageContent<"brands">} />}
+{pageKey === "locations" && <LocationsPage locale={locale} content={locale.pages.locations as PageContent<"locations">} />}
+{pageKey === "sustainability" && <SustainabilityPage locale={locale} content={locale.pages.sustainability as PageContent<"sustainability">} />}
+{pageKey === "compliance" && <CompliancePage locale={locale} content={locale.pages.compliance as PageContent<"compliance">} />}
+{pageKey === "contact" && <ContactPage locale={locale} content={locale.pages.contact as PageContent<"contact">} />}
+
+{/* This build-time switch emits static HTML and therefore does not use client:* hydration. */}

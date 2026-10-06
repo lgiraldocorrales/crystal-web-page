@@ -1,0 +1,25 @@
+---
+import NextPage from "@/components/NextPage.astro";
+import PageRenderer from "@/components/PageRenderer.astro";
+import type { LocaleId, PageKey } from "@/data/site";
+import { locales } from "@/data/site";
+import BaseLayout from "@/layouts/BaseLayout.astro";
+
+/**
+ * Props for a complete statically generated corporate route.
+ */
+export interface Props {
+  /** Locale identifier resolved by the route layer. */
+  localeId: LocaleId;
+  /** Page family resolved by the route layer. */
+  pageKey: PageKey;
+}
+
+const { localeId, pageKey } = Astro.props;
+const locale = locales[localeId];
+---
+
+<BaseLayout locale={locale} pageKey={pageKey}>
+  <PageRenderer locale={locale} pageKey={pageKey} />
+  {pageKey !== "contact" && <NextPage locale={locale} pageKey={pageKey} />}
+</BaseLayout>

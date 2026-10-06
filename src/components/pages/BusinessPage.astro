@@ -1,0 +1,17 @@
+---
+import InternalHero from "@/components/InternalHero.astro";
+import type { Locale, PageContent } from "@/data/site";
+import { shared } from "@/data/site";
+
+/** Props for the vertically integrated business-model page. */
+export interface Props {
+  /** Active locale. */ locale: Locale;
+  /** Industrial units and full-package copy. */ content: PageContent<"business">;
+}
+const { locale, content: p } = Astro.props;
+---
+<InternalHero eyebrow={p.eyebrow} title={p.title} intro={p.intro} image={shared.media.fullPackage} pageKey="business" />
+<section class="business-system section shell"><div class="section-heading"><span class="section-no">01</span><h2 data-title>{p.processTitle}</h2></div><div class="unit-list">{p.units.map((unit) => <article class="unit" data-unit><div class="unit__head"><span>{unit.number}</span><h3>{unit.title}</h3><p>{unit.subtitle}</p><button type="button" aria-expanded="false" aria-label={`${locale.common.explore} ${unit.title}`}>+</button></div><div class="unit__body"><figure><img src={unit.image} alt="" width="1000" height="720" loading="lazy"></figure><div><p>{unit.body}</p><ul>{unit.facts.map((fact) => <li>{fact}</li>)}</ul></div></div></article>)}</div></section>
+<section class="full-package section"><div class="shell"><span class="section-no">02</span><h2 data-title>{p.closingTitle}</h2><p>{p.closingBody}</p></div></section>
+
+{/* Accordion behavior is progressively enhanced without hydrating a framework component. */}

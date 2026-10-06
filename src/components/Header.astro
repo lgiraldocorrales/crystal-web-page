@@ -1,0 +1,44 @@
+---
+import type { Locale, PageKey } from "@/data/site";
+import { shared } from "@/data/site";
+
+/**
+ * Props for the bilingual global header.
+ */
+export interface Props {
+  /** Active locale containing labels and route mappings. */
+  locale: Locale;
+  /** Current route key used for active states and language switching. */
+  pageKey: PageKey;
+}
+
+const { locale, pageKey } = Astro.props;
+type NavKey = Exclude<PageKey, "home">;
+const primary: NavKey[] = ["company", "purpose", "business", "sustainability"];
+const menu: PageKey[] = ["home", "company", "purpose", "business", "brands", "locations", "sustainability", "compliance", "contact"];
+const homeLabel = locale.id === "es" ? "Inicio" : "Home";
+const navigationLabel = locale.id === "es" ? "Navegación principal" : "Primary navigation";
+const themeLabel = locale.id === "es" ? "Cambiar tema de color" : "Change color theme";
+---
+
+<header class="site-header" data-header>
+  <a class="brand" href={locale.paths.home} aria-label="Crystal — Home"><img src={shared.logo} alt="Crystal" width="166" height="52"></a>
+  <nav class="desktop-nav" aria-label={navigationLabel}>
+    {primary.map((key, index) => <a aria-current={pageKey === key ? "page" : undefined} href={locale.paths[key]}><span>0{index + 1}</span>{locale.nav[key]}</a>)}
+  </nav>
+  <div class="header-actions">
+    <button class="theme-toggle" type="button" data-theme-toggle aria-pressed="false"><span class="sr-only">{themeLabel}</span><i aria-hidden="true"></i></button>
+    <a class="language-link" href={locale.alternatePaths[pageKey]} hreflang={locale.id === "es" ? "en" : "es"}>{locale.languageLabel}</a>
+    <a class="contact-link" aria-current={pageKey === "contact" ? "page" : undefined} href={locale.paths.contact}>{locale.nav.contact}</a>
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-menu" data-menu-toggle><span>{locale.menu}</span><i></i></button>
+  </div>
+  <div class="site-menu" id="site-menu" data-mobile-menu hidden>
+    <div class="menu-top"><img src={shared.logo} alt="" width="166" height="52"><button type="button" data-menu-close>{locale.close} <span>×</span></button></div>
+    <nav aria-label={locale.menu}>
+      {menu.map((key, index) => <a href={locale.paths[key]} aria-current={pageKey === key ? "page" : undefined}><span>{String(index + 1).padStart(2, "0")}</span><strong>{key === "home" ? homeLabel : locale.nav[key]}</strong><i>↗</i></a>)}
+    </nav>
+    <p>{locale.footer.statement}</p>
+  </div>
+</header>
+
+{/* The menu uses a small global controller; a framework island would add hydration without improving this interaction. */}

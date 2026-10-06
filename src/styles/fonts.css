@@ -1,0 +1,12 @@
+/**
+ * Self-hosted primary typeface.
+ * The Latin Extended variable file covers Spanish and English while avoiding
+ * unnecessary Cyrillic and Vietnamese subsets in the production bundle.
+ */
+@font-face {
+  font-family: "Raleway Variable";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url("/assets/fonts/raleway-latin-ext-wght-normal.woff2") format("woff2-variations");
+}

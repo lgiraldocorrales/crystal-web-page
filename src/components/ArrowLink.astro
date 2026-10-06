@@ -1,0 +1,21 @@
+---
+/**
+ * Props for an editorial text link with a directional arrow.
+ */
+export interface Props {
+  /** Destination URL. */
+  href: string;
+  /** Visible link label. */
+  label: string;
+  /** Uses the high-contrast variant over dark media. */
+  light?: boolean;
+  /** Opens the destination in a new browsing context. */
+  external?: boolean;
+}
+
+const { href, label, light = false, external = false } = Astro.props;
+---
+
+<a class:list={["line-link", { "line-link--light": light }]} href={href} target={external ? "_blank" : undefined} rel={external ? "noopener" : undefined}>
+  <span>{label}</span><i aria-hidden="true">↗</i>
+</a>

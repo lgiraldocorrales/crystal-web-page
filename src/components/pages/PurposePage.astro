@@ -1,0 +1,16 @@
+---
+import InternalHero from "@/components/InternalHero.astro";
+import type { Locale, PageContent } from "@/data/site";
+import { shared } from "@/data/site";
+
+/** Props for the purpose page. */
+export interface Props {
+  /** Active locale. */ locale: Locale;
+  /** Purpose statement and values. */ content: PageContent<"purpose">;
+}
+const { content: p } = Astro.props;
+---
+<InternalHero eyebrow={p.eyebrow} title={p.title} intro={p.intro} image={shared.media.purpose} imageAlt={p.heroAlt} pageKey="purpose" />
+<section class="purpose-quote section"><div class="shell"><span aria-hidden="true">“</span><h2 data-title>{p.statement}</h2></div></section>
+<section class="values section shell"><div class="section-heading"><span class="section-no">01</span><h2 data-title>{p.valuesTitle}</h2></div><ol class="values-list">{p.values.map(([title, body], index) => <li><span>0{index + 1}</span><h3>{title}</h3><p>{body}</p></li>)}</ol></section>
+<section class="essence-closing section"><figure data-image-reveal><img src={shared.media.essence} alt="" width="1600" height="1000" loading="lazy"></figure><p data-title>{p.closing}</p></section>

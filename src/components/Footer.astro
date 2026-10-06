@@ -1,0 +1,25 @@
+---
+import type { Locale, PageKey } from "@/data/site";
+import { shared } from "@/data/site";
+
+/**
+ * Props for the global corporate footer.
+ */
+export interface Props {
+  /** Locale used for navigation and legal labels. */
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+type NavKey = Exclude<PageKey, "home">;
+const links: NavKey[] = ["company", "purpose", "business", "brands", "locations", "sustainability", "compliance", "contact"];
+---
+
+<footer class="site-footer">
+  <div class="shell footer-main">
+    <div><img src={shared.logo} alt="Crystal" width="210" height="70" loading="lazy"><p>{locale.footer.statement}</p></div>
+    <nav aria-label={locale.id === "es" ? "Información corporativa" : "Corporate information"}>{links.map((key) => <a href={locale.paths[key]}>{locale.nav[key]}</a>)}</nav>
+    <nav aria-label={locale.id === "es" ? "Redes sociales" : "Social media"}>{Object.entries(shared.socials).map(([name, url]) => <a href={url} target="_blank" rel="noopener">{name}<i>↗</i></a>)}</nav>
+  </div>
+  <div class="shell footer-bottom"><span>© {new Date().getUTCFullYear()} Crystal S.A.S. {locale.footer.rights}</span><span>Medellín / Colombia</span></div>
+</footer>
