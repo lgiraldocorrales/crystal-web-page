@@ -1,5 +1,5 @@
 /** Base URL for media while the asset inventory is migrated to Azure Blob Storage. */
-export const assetBase = import.meta.env.ASSET_BASE_URL || "https://crystal.com.co/static/store";
+export const assetBase = import.meta.env.ASSET_BASE_URL || "https://www.crystal.com.co/static/store";
 
 const image = (path: string) => `${assetBase}/images/${path}`;
 
