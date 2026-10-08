@@ -50,5 +50,6 @@ Copy `.env.example` to `.env` for local testing. Never commit credentials. Turns
 
 - [Architecture](docs/ARCHITECTURE.md)
 - [Azure deployment](docs/AZURE_DEPLOYMENT.md)
+- [Temporary GitHub Pages preview](docs/GITHUB_PAGES.md)
 
 The component interfaces use JSDoc for IntelliSense, frontmatter explains server/build-time logic, and source comments document why no `client:*` hydration is needed.

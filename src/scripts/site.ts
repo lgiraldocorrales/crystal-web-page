@@ -140,14 +140,21 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
   const initContact = () => {
     const form = document.querySelector<HTMLFormElement>("[data-contact-form]");
     if (!form) return;
+    const staticPreview = document.querySelector('meta[name="crystal-preview"]')?.getAttribute("content") === "pages";
     const status = form.querySelector<HTMLElement>("[data-form-status]");
     const button = form.querySelector<HTMLElement>("button[type=submit] span");
     if (!status || !button) return;
     const language = document.body.dataset.language || "es";
-    const labels = language === "en" ? { idle: "Send message", busy: "Sending…", ok: "We received your message and will reply as soon as possible.", error: "We could not send your message. Please try again." } : { idle: "Enviar mensaje", busy: "Enviando…", ok: "Recibimos tu mensaje. Te responderemos lo antes posible.", error: "No fue posible enviar el mensaje. Intenta nuevamente." };
+    const labels = language === "en"
+      ? { idle: "Send message", busy: "Sending…", ok: "We received your message and will reply as soon as possible.", error: "We could not send your message. Please try again.", preview: "This temporary preview cannot send messages. The form will be enabled in Azure." }
+      : { idle: "Enviar mensaje", busy: "Enviando…", ok: "Recibimos tu mensaje. Te responderemos lo antes posible.", error: "No fue posible enviar el mensaje. Intenta nuevamente.", preview: "Esta vista temporal no puede enviar mensajes. El formulario se habilitará en Azure." };
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
       if (!form.reportValidity()) return;
+      if (staticPreview) {
+        status.textContent = labels.preview;
+        return;
+      }
       const data = new FormData(form);
       button.textContent = labels.busy;
       status.textContent = "";

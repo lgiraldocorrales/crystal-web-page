@@ -12,9 +12,11 @@
     "dev": "astro dev",
     "prebuild": "npm run prepare:assets",
     "build": "astro build",
+    "build:pages": "node scripts/build-pages.mjs",
     "preview": "astro preview",
     "check": "astro check && node tests/build-check.mjs",
-    "test": "npm run build && npm run check"
+    "test": "npm run build && npm run check",
+    "test:pages": "node --test tests/pages-preview.test.mjs"
   },
   "dependencies": {
     "@fontsource-variable/raleway": "5.3.0",
