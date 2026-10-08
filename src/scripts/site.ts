@@ -146,8 +146,8 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
     if (!status || !button) return;
     const language = document.body.dataset.language || "es";
     const labels = language === "en"
-      ? { idle: "Send message", busy: "Sending…", ok: "We received your message and will reply as soon as possible.", error: "We could not send your message. Please try again.", preview: "This temporary preview cannot send messages. The form will be enabled in Azure." }
-      : { idle: "Enviar mensaje", busy: "Enviando…", ok: "Recibimos tu mensaje. Te responderemos lo antes posible.", error: "No fue posible enviar el mensaje. Intenta nuevamente.", preview: "Esta vista temporal no puede enviar mensajes. El formulario se habilitará en Azure." };
+      ? { idle: "Send message", busy: "Sending…", ok: "We received your message and will reply as soon as possible.", error: "We could not send your message. Please try again.", preview: "This temporary GitHub Pages preview cannot send messages. The form will be enabled in Azure." }
+      : { idle: "Enviar mensaje", busy: "Enviando…", ok: "Recibimos tu mensaje. Te responderemos lo antes posible.", error: "No fue posible enviar el mensaje. Intenta nuevamente.", preview: "Esta vista temporal de GitHub Pages no puede enviar mensajes. El formulario se habilitará en Azure." };
     form.addEventListener("submit", async (event) => {
       event.preventDefault();
       if (!form.reportValidity()) return;
