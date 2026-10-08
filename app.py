@@ -133,7 +133,7 @@ def _mail_message(subject: str, recipient: str, text: str, html_body: str) -> Em
 
 @app.after_request
 def security_headers(response):
-    asset_url = os.getenv("ASSET_BASE_URL", "https://crystal.com.co/static/store")
+    asset_url = os.getenv("ASSET_BASE_URL", "https://www.crystal.com.co/static/store")
     asset_origin = f"{urlparse(asset_url).scheme}://{urlparse(asset_url).netloc}"
     script_hashes = ""
     if response.mimetype == "text/html":
