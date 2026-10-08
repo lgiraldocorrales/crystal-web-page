@@ -1,8 +1,10 @@
 import assert from "node:assert/strict";
-import { access, mkdir, mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
+import { access, mkdir, mkdtemp, readFile, readdir, rm, writeFile } from "node:fs/promises";
+import { execFileSync } from "node:child_process";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import test from "node:test";
+import { fileURLToPath } from "node:url";
 import { preparePages, previewRewriter } from "../scripts/pages-preview.mjs";
 
 const options = { base: "/crystal-web-page", origin: "https://lgiraldocorrales.github.io" };
@@ -38,4 +40,11 @@ test("preview package adds markers, blocks indexing and keeps the artifact stati
 test("preview rejects invalid deployment configuration", () => {
   assert.throws(() => previewRewriter({ ...options, base: "../bad" }));
   assert.throws(() => previewRewriter({ ...options, origin: "http://example.com" }));
+});
+
+test("compiled preview JavaScript remains syntactically valid", async () => {
+  const assets = new URL("../dist/_astro/", import.meta.url);
+  for (const file of await readdir(assets)) {
+    if (file.endsWith(".js")) execFileSync(process.execPath, ["--check", fileURLToPath(new URL(file, assets))]);
+  }
 });

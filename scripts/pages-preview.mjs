@@ -1,7 +1,10 @@
 import { readFile, readdir, stat, writeFile } from "node:fs/promises";
 import { extname, join } from "node:path";
 
-const textExtensions = new Set([".css", ".html", ".js", ".webmanifest", ".xml"]);
+// Compiled JavaScript may contain regular-expression literals beginning with
+// `/`; URLs required by the preview are already emitted in HTML, so scripts are
+// deliberately excluded from textual rewriting.
+const textExtensions = new Set([".css", ".html", ".webmanifest", ".xml"]);
 
 /** Escapes text before placing it in a regular expression. */
 const escapeRegExp = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
